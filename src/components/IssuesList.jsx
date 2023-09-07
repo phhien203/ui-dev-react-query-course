@@ -2,11 +2,12 @@ import { useQuery } from 'react-query';
 
 import { IssueItem } from './IssueItem';
 
-export default function IssuesList({ labels }) {
-  const issuesQuery = useQuery(['issues', { labels }], () => {
+export default function IssuesList({ labels, status }) {
+  const issuesQuery = useQuery(['issues', { labels, status }], () => {
     const queryString = labels.map((l) => `labels[]=${l}`).join('&');
+    const statusString = status ? `&status=${status}` : '';
 
-    return fetch(`/api/issues?${queryString}`).then((res) => {
+    return fetch(`/api/issues?${queryString}${statusString}`).then((res) => {
       if (res.status !== 200) {
         throw new Error('Error getting issues');
       }
